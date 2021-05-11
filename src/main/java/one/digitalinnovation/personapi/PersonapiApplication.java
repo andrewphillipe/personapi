@@ -11,10 +11,6 @@ public class PersonapiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PersonapiApplication.class, args);
 
-		System.out.println("Inicial!");
-
-
-
 	}
 
 }
