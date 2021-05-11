@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class PersonNotFoundExcepion extends Exception {
     public PersonNotFoundExcepion(Long id) {
-        super("Person with ID" + id + "not found" );
+        super("Person with ID" + id + " not found" );
     }
 }
