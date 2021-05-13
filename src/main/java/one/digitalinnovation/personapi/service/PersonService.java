@@ -2,10 +2,10 @@ package one.digitalinnovation.personapi.service;
 
 import lombok.AllArgsConstructor;
 import one.digitalinnovation.personapi.dto.request.PersonDTO;
-import one.digitalinnovation.personapi.dto.response.MessageRespondeDTO;
+import one.digitalinnovation.personapi.dto.response.MessageResponseDTO;
 import one.digitalinnovation.personapi.entity.Person;
 import one.digitalinnovation.personapi.exception.PersonNotFoundExcepion;
-import one.digitalinnovation.personapi.mapper.PersonMapper;
+import one.digitalinnovation.personapi.dto.mapper.PersonMapper;
 import one.digitalinnovation.personapi.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,12 +21,20 @@ public class PersonService {
 
     private final PersonMapper personMapper = PersonMapper.INSTANCE;
 
-    public MessageRespondeDTO createPerson (PersonDTO personDTO){
-        Person personToSave = personMapper.toModel(personDTO);
+    public MessageResponseDTO create(PersonDTO personDTO){
+        Person person = personMapper.toModel(personDTO);
+        Person savedPerson = personRepository.save(person);
 
-        Person savedPerson = personRepository.save(personToSave);
-        return createMessageResponse(savedPerson.getId(), "Created person with ID ");
+        MessageResponseDTO messageResponse = createMessageResponse("Created person with ID ", savedPerson.getId());
 
+        return messageResponse;
+
+    }
+
+    private MessageResponseDTO createMessageResponse(String s, Long id2) {
+        return MessageResponseDTO.builder()
+                .message(s + id2)
+                .build();
     }
 
     public List<PersonDTO> listAll() {
@@ -53,7 +61,7 @@ public class PersonService {
 
     }
 
-    public MessageRespondeDTO updateById(Long id, PersonDTO personDTO) throws PersonNotFoundExcepion {
+    public MessageResponseDTO updateById(Long id, PersonDTO personDTO) throws PersonNotFoundExcepion {
         verifyIfExists(id);
         Person personToUpdate = personMapper.toModel(personDTO);
 
@@ -62,8 +70,8 @@ public class PersonService {
 
     }
 
-    private MessageRespondeDTO createMessageResponse(Long id, String message) {
-        return MessageRespondeDTO
+    private MessageResponseDTO createMessageResponse(Long id, String message) {
+        return MessageResponseDTO
                 .builder()
                 .message(message + id)
                 .build();
